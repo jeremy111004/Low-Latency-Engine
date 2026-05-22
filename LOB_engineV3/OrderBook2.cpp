@@ -53,8 +53,7 @@ void LOB::processOrder(uint16_t quantity, uint32_t ID, uint16_t price, Side type
 void LOB::addOrder(uint16_t quantity, uint32_t ID, uint16_t price, Side type) {
  // if the order hasn't been fully matched (or not matched at all) we have to
   // actually save it:
-    // this line create an order directly in the pre allocated memory Arena
-    //
+    
 
     bool isBuy = type == Side::Buy;
 
