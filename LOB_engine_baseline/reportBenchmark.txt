@@ -1,0 +1,32 @@
+jeremy1110@fedora:~/LOB_engine_baseline$ sudo perf stat -e cycles,instructions,branches,branch-misses,cache-misses,cache-references,L1-dcache-load-misses,L1-dcache-loads ./engine
+2026-04-13T11:46:31+02:00
+Running ./engine
+Run on (32 X 5336.53 MHz CPU s)
+CPU Caches:
+  L1 Data 32 KiB (x16)
+  L1 Instruction 32 KiB (x16)
+  L2 Unified 1024 KiB (x16)
+  L3 Unified 32768 KiB (x2)
+Load Average: 0.43, 0.45, 0.43
+-------------------------------------------------------------------------------
+Benchmark                     Time             CPU   Iterations UserCounters...
+-------------------------------------------------------------------------------
+LOB_Naive_Continuous     739265 ns       739190 ns          904 items_per_second=27.0567M/s
+
+ Performance counter stats for './engine':
+
+     4,036,475,515      cycles                                                                  (62.35%)
+     8,492,299,759      instructions                                                            (62.33%)
+     1,939,958,567      branches                                                                (62.45%)
+        48,988,749      branch-misses                                                           (62.57%)
+         2,187,084      cache-misses                                                            (62.69%)
+        79,238,702      cache-references                                                        (62.65%)
+        52,288,898      L1-dcache-load-misses                                                   (62.54%)
+     3,653,284,090      L1-dcache-loads                                                         (62.42%)
+
+       0.813426282 seconds time elapsed
+
+       0.795273000 seconds user
+       0.017983000 seconds sys
+
+
