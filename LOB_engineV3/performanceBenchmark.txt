@@ -1,0 +1,14 @@
+jeremy1110@fedora:~/LOB_engineV3$ taskset -c 2 ./engine
+2026-05-24T19:49:46+02:00
+Running ./engine
+Run on (32 X 2592.5 MHz CPU s)
+CPU Caches:
+  L1 Data 32 KiB (x16)
+  L1 Instruction 32 KiB (x16)
+  L2 Unified 1024 KiB (x16)
+  L3 Unified 32768 KiB (x2)
+Load Average: 0.55, 0.49, 0.50
+----------------------------------------------------------------------------------------
+Benchmark                              Time             CPU   Iterations UserCounters...
+----------------------------------------------------------------------------------------
+LOB_Continuous/iterations:500     199619 ns       199665 ns          500 items_per_second=100.168M/s
