@@ -1,6 +1,8 @@
 # Ignore compiled binaries
 engine
 LOB_engineV3/engine
+LOB_engine_baseline/engine
+LOB_enginev2/engine
 
 # Ignore build directories and object files
 build/
