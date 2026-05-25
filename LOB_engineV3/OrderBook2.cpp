@@ -41,27 +41,27 @@ void LOB::processOrder(uint16_t quantity, uint32_t ID, uint16_t price, Side type
 	uint16_t Qremaining{};
 	if(price >= 300 || price < 1)[[unlikely]]{return;}
 	if(type == Side::Sell){
-		Qremaining = LOB::matching<Side::Sell>(quantity, ID, price);
+		Qremaining = LOB::matching<Side::Sell>(quantity, ID, price)	;	if(Qremaining > 0){addOrder<Side::Sell>(Qremaining,ID,price);}
+	
 	}
 	else{
 		Qremaining = LOB::matching<Side::Buy>(quantity, ID, price);
+		if(Qremaining > 0){addOrder<Side::Buy>(Qremaining,ID,price) ;}
+
 	}
 
-	if(Qremaining > 0){addOrder(Qremaining,ID,price,type);}
 };
-
-void LOB::addOrder(uint16_t quantity, uint32_t ID, uint16_t price, Side type) {
+template<Side S>
+void LOB::addOrder(uint16_t quantity, uint32_t ID, uint16_t price) {
  // if the order hasn't been fully matched (or not matched at all) we have to
   // actually save it:
-    
+    constexpr Side side = S == Side::Buy ? Side::Buy : Side::Sell;	 
 
-    bool isBuy = type == Side::Buy;
-
-    auto &priceLevelID = isBuy ? data.idQueuedBid[price] : data.idQueuedAsk[price];
-    auto &priceLevelQ =isBuy ? data.quantityOrdersBid[price] : data.quantityOrdersAsk[price];
-    auto &bitIndexMap = isBuy? data.bitIndexBid : data.bitIndexAsk;
-    auto& priceLvlTail = isBuy? data.bidTail[price] : data.askTail[price];
-    auto& priceLvlHead = isBuy ? data.bidHead[price] : data.askHead[price];
+    auto &priceLevelID = side == Side::Buy ? data.idQueuedBid[price] : data.idQueuedAsk[price];
+    auto &priceLevelQ =side == Side::Buy ? data.quantityOrdersBid[price] : data.quantityOrdersAsk[price];
+    auto &bitIndexMap = side == Side::Buy ? data.bitIndexBid : data.bitIndexAsk;
+    auto& priceLvlTail = side == Side::Buy? data.bidTail[price] : data.askTail[price];
+    auto& priceLvlHead = side == Side::Buy ? data.bidHead[price] : data.askHead[price];
 
     if(priceLvlTail - priceLvlHead == 64)[[unlikely]]{return;}
 
@@ -70,7 +70,7 @@ void LOB::addOrder(uint16_t quantity, uint32_t ID, uint16_t price, Side type) {
       
       priceLevelID[priceLvlTail & 63] = ID;
       priceLevelQ[priceLvlTail & 63] = quantity;
-      data.typeByID[ID] = isBuy ? 'B' : 'A';
+      data.typeByID[ID] = S == Side::Buy ? 'B' : 'A';
       data.priceByID[ID] = price;
       priceLvlTail ++;
   }

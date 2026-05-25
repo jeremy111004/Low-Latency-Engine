@@ -1,0 +1,33 @@
+
+jeremy1110@fedora:~/LOB_engineV3$ perf stat ./engine
+2026-05-24T20:15:27+02:00
+Running ./engine
+Run on (32 X 5310.03 MHz CPU s)
+CPU Caches:
+  L1 Data 32 KiB (x16)
+  L1 Instruction 32 KiB (x16)
+  L2 Unified 1024 KiB (x16)
+  L3 Unified 32768 KiB (x2)
+Load Average: 0.30, 0.44, 0.48
+----------------------------------------------------------------------------------------
+Benchmark                              Time             CPU   Iterations UserCounters...
+----------------------------------------------------------------------------------------
+LOB_Continuous/iterations:500     201174 ns       201208 ns          500 items_per_second=99.3997M/s
+
+ Performance counter stats for './engine':
+
+                 0      context-switches:u               #      0.0 cs/sec  cs_per_second     
+                 0      cpu-migrations:u                 #      0.0 migrations/sec  migrations_per_second
+               575      page-faults:u                    #   5470.5 faults/sec  page_faults_per_second
+            105.11 msec task-clock:u                     #      0.9 CPUs  CPUs_utilized       
+         6,487,408      branch-misses:u                  #      2.4 %  branch_miss_rate         (48.89%)
+       268,000,377      branches:u                       #   2549.7 M/sec  branch_frequency     (49.84%)
+       490,964,912      cpu-cycles:u                     #      4.7 GHz  cycles_frequency       (66.95%)
+     1,509,137,735      instructions:u                   #      3.1 instructions  insn_per_cycle  (51.11%)
+        47,532,188      stalled-cycles-frontend:u        #     0.10 frontend_cycles_idle        (50.16%)
+
+       0.105619963 seconds time elapsed
+
+       0.093555000 seconds user
+       0.012071000 seconds sys
+

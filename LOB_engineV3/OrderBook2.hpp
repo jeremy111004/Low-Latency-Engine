@@ -24,7 +24,9 @@ template<Side S>
 int indexBestPriceFinder();
   template<Side S>
   uint16_t matching(uint16_t quantity, uint32_t ID, uint16_t price);
-  void addOrder(uint16_t quantity, uint32_t ID, uint16_t price, Side type);
+
+  template<Side S>
+  void addOrder(uint16_t quantity, uint32_t ID, uint16_t price);
   void cancelOrder(uint32_t ID);
   uint64_t editOrder(uint64_t id, uint32_t newPrice, uint32_t newQuantity);
 
