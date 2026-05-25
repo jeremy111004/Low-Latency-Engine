@@ -1,0 +1,32 @@
+sudo perf stat -e cycles,instructions,branches,branch-misses,cache-misses,cache-references,L1-dcache-load-misses,L1-dcache-loads ./engine
+2026-05-25T10:13:50+02:00
+Running ./engine
+Run on (32 X 4965.65 MHz CPU s)
+CPU Caches:
+  L1 Data 32 KiB (x16)
+  L1 Instruction 32 KiB (x16)
+  L2 Unified 1024 KiB (x16)
+  L3 Unified 32768 KiB (x2)
+Load Average: 0.20, 0.19, 0.22
+-----------------------------------------------------------------------------
+Benchmark                   Time             CPU   Iterations UserCounters...
+-----------------------------------------------------------------------------
+LOB_Naive_Baseline     760120 ns       760070 ns          919 items_per_second=26.3134M/s
+
+ Performance counter stats for './engine':
+
+     4,094,312,936      cycles                                                                  (62.32%)
+     8,609,247,578      instructions                                                            (62.39%)
+     1,971,146,262      branches                                                                (62.52%)
+        49,394,534      branch-misses                                                           (62.64%)
+         1,544,625      cache-misses                                                            (62.68%)
+        78,699,542      cache-references                                                        (62.60%)
+        52,799,014      L1-dcache-load-misses                                                   (62.48%)
+     3,676,912,906      L1-dcache-loads                                                         (62.36%)
+
+       0.828658537 seconds time elapsed
+
+       0.814579000 seconds user
+       0.014009000 seconds sys
+
+
