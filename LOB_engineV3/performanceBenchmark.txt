@@ -1,33 +1,31 @@
 
-jeremy1110@fedora:~/LOB_engineV3$ perf stat ./engine
-2026-05-24T20:15:27+02:00
+sudo perf stat -e cycles,instructions,branches,branch-misses,cache-misses,cache-references,L1-dcache-load-misses,L1-dcache-loads ./engine
+2026-05-25T10:50:59+02:00
 Running ./engine
-Run on (32 X 5310.03 MHz CPU s)
+Run on (32 X 5002.35 MHz CPU s)
 CPU Caches:
   L1 Data 32 KiB (x16)
   L1 Instruction 32 KiB (x16)
   L2 Unified 1024 KiB (x16)
   L3 Unified 32768 KiB (x2)
-Load Average: 0.30, 0.44, 0.48
+Load Average: 0.33, 0.26, 0.21
 ----------------------------------------------------------------------------------------
 Benchmark                              Time             CPU   Iterations UserCounters...
 ----------------------------------------------------------------------------------------
-LOB_Continuous/iterations:500     201174 ns       201208 ns          500 items_per_second=99.3997M/s
+LOB_Continuous/iterations:500     204560 ns       204619 ns          500 items_per_second=97.7426M/s
 
  Performance counter stats for './engine':
 
-                 0      context-switches:u               #      0.0 cs/sec  cs_per_second     
-                 0      cpu-migrations:u                 #      0.0 migrations/sec  migrations_per_second
-               575      page-faults:u                    #   5470.5 faults/sec  page_faults_per_second
-            105.11 msec task-clock:u                     #      0.9 CPUs  CPUs_utilized       
-         6,487,408      branch-misses:u                  #      2.4 %  branch_miss_rate         (48.89%)
-       268,000,377      branches:u                       #   2549.7 M/sec  branch_frequency     (49.84%)
-       490,964,912      cpu-cycles:u                     #      4.7 GHz  cycles_frequency       (66.95%)
-     1,509,137,735      instructions:u                   #      3.1 instructions  insn_per_cycle  (51.11%)
-        47,532,188      stalled-cycles-frontend:u        #     0.10 frontend_cycles_idle        (50.16%)
+       526,226,914      cycles                                                                  (61.41%)
+     1,537,373,226      instructions                                                            (62.33%)
+       269,232,206      branches                                                                (63.26%)
+         6,628,919      branch-misses                                                           (63.51%)
+           604,595      cache-misses                                                            (63.50%)
+        18,167,055      cache-references                                                        (62.93%)
+         9,382,934      L1-dcache-load-misses                                                   (62.00%)
+       573,796,573      L1-dcache-loads                                                         (61.07%)
 
-       0.105619963 seconds time elapsed
+       0.107338022 seconds time elapsed
 
-       0.093555000 seconds user
-       0.012071000 seconds sys
-
+       0.102390000 seconds user
+       0.004970000 seconds sys
