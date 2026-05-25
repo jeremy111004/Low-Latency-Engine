@@ -1,0 +1,8 @@
+# Ignore compiled binaries
+engine
+LOB_engineV3/engine
+
+# Ignore build directories and object files
+build/
+*.o
+*.obj
