@@ -15,25 +15,22 @@ class LOB {
 public:
 	LOB(){matchedList.reserve(10000);}
   // Core API
-enum class Side : uint8_t{
-	Buy,
-	Sell
-};
-void processOrder(uint16_t quantity, uint32_t ID, uint16_t price, Side type);
+
+void processOrder(uint16_t quantity, uint32_t ID, uint16_t price, Side type) noexcept;
 template<Side S>
-int indexBestPriceFinder();
+int indexBestPriceFinder() noexcept;
   template<Side S>
-  uint16_t matching(uint16_t quantity, uint32_t ID, uint16_t price);
+  uint16_t matching(uint16_t quantity, uint32_t ID, uint16_t price) noexcept ;
 
   template<Side S>
-  void addOrder(uint16_t quantity, uint32_t ID, uint16_t price);
-  void cancelOrder(uint32_t ID);
-  uint64_t editOrder(uint64_t id, uint32_t newPrice, uint32_t newQuantity);
+  void addOrder(uint16_t quantity, uint32_t ID, uint16_t price)noexcept;
+  void cancelOrder(uint32_t ID) noexcept;
+  uint64_t editOrder(uint64_t id, uint32_t newPrice, uint32_t newQuantity) noexcept;
 
-  void reset();
+  void reset()noexcept;
 
   // Utilities
-  uint64_t generateID();
+  uint64_t generateID()noexcept;
  
 
 private:
@@ -42,10 +39,10 @@ private:
    uint16_t NextID{0} ;
   };
 
-using Side = LOB::Side;
+
 
 template<Side S>
-int LOB::indexBestPriceFinder(){
+int LOB::indexBestPriceFinder() noexcept{
 	int index = -1;
 	if constexpr (S == Side::Buy){
 		auto& bitMapToLookInto = data.bitIndexBid;
@@ -74,8 +71,8 @@ int LOB::indexBestPriceFinder(){
 
 
 
-template<LOB::Side S>
-uint16_t LOB::matching(uint16_t quantity, uint32_t ID, uint16_t price) {
+template<Side S>
+uint16_t LOB::matching(uint16_t quantity, uint32_t ID, uint16_t price) noexcept{
 
 constexpr Side oppositeSide = S == Side::Buy ? Side::Sell :Side::Buy;
 auto bestIndex = indexBestPriceFinder<oppositeSide>();

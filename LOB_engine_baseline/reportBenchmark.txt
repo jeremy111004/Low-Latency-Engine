@@ -1,32 +1,32 @@
-jeremy1110@fedora:~/LOB_engine_baseline$ sudo perf stat -e cycles,instructions,branches,branch-misses,cache-misses,cache-references,L1-dcache-load-misses,L1-dcache-loads ./engine
-2026-04-13T11:46:31+02:00
+sudo perf stat -e cycles,instructions,branches,branch-misses,cache-misses,cache-references,L1-dcache-load-misses,L1-dcache-loads ./engine
+2026-05-25T10:13:50+02:00
 Running ./engine
-Run on (32 X 5336.53 MHz CPU s)
+Run on (32 X 4965.65 MHz CPU s)
 CPU Caches:
   L1 Data 32 KiB (x16)
   L1 Instruction 32 KiB (x16)
   L2 Unified 1024 KiB (x16)
   L3 Unified 32768 KiB (x2)
-Load Average: 0.43, 0.45, 0.43
--------------------------------------------------------------------------------
-Benchmark                     Time             CPU   Iterations UserCounters...
--------------------------------------------------------------------------------
-LOB_Naive_Continuous     739265 ns       739190 ns          904 items_per_second=27.0567M/s
+Load Average: 0.20, 0.19, 0.22
+-----------------------------------------------------------------------------
+Benchmark                   Time             CPU   Iterations UserCounters...
+-----------------------------------------------------------------------------
+LOB_Naive_Baseline     760120 ns       760070 ns          919 items_per_second=26.3134M/s
 
  Performance counter stats for './engine':
 
-     4,036,475,515      cycles                                                                  (62.35%)
-     8,492,299,759      instructions                                                            (62.33%)
-     1,939,958,567      branches                                                                (62.45%)
-        48,988,749      branch-misses                                                           (62.57%)
-         2,187,084      cache-misses                                                            (62.69%)
-        79,238,702      cache-references                                                        (62.65%)
-        52,288,898      L1-dcache-load-misses                                                   (62.54%)
-     3,653,284,090      L1-dcache-loads                                                         (62.42%)
+     4,094,312,936      cycles                                                                  (62.32%)
+     8,609,247,578      instructions                                                            (62.39%)
+     1,971,146,262      branches                                                                (62.52%)
+        49,394,534      branch-misses                                                           (62.64%)
+         1,544,625      cache-misses                                                            (62.68%)
+        78,699,542      cache-references                                                        (62.60%)
+        52,799,014      L1-dcache-load-misses                                                   (62.48%)
+     3,676,912,906      L1-dcache-loads                                                         (62.36%)
 
-       0.813426282 seconds time elapsed
+       0.828658537 seconds time elapsed
 
-       0.795273000 seconds user
-       0.017983000 seconds sys
+       0.814579000 seconds user
+       0.014009000 seconds sys
 
 

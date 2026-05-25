@@ -1,18 +1,17 @@
 #include "OrderBook2.hpp"
 #include "Order2.hpp"
-#include <atomic>
+
 #include <cstdint>
-#include <iostream>
+
 #include <map>
 #include <unordered_map>
-#include <utility>
-#include <cmath>
 
-uint64_t LOB::generateID() {
+
+uint64_t LOB::generateID() noexcept {
 	return NextID++; 
 }
 
-void LOB::reset() {
+void LOB::reset() noexcept {
    matchedList.clear();
 
    uint16_t numberElements = 64;
@@ -37,45 +36,74 @@ void LOB::reset() {
   NextID = 0;
  
 }
-void LOB::processOrder(uint16_t quantity, uint32_t ID, uint16_t price, Side type){
-	uint16_t Qremaining{};
-	if(price >= 300 || price < 1)[[unlikely]]{return;}
-	if(type == Side::Sell){
-		Qremaining = LOB::matching<Side::Sell>(quantity, ID, price)	;	if(Qremaining > 0){addOrder<Side::Sell>(Qremaining,ID,price);}
-	
-	}
-	else{
-		Qremaining = LOB::matching<Side::Buy>(quantity, ID, price);
-		if(Qremaining > 0){addOrder<Side::Buy>(Qremaining,ID,price) ;}
+ void LOB::processOrder(uint16_t quantity, uint32_t ID, uint16_t price, Side type) noexcept{
 
-	}
+    uint16_t Qremaining{};
+
+    if(price >= 300 || price < 1)[[unlikely]]{return;}
+
+    if(type == Side::Sell){
+
+        Qremaining = LOB::matching<Side::Sell>(quantity, ID, price)    ;    if(Qremaining > 0){addOrder<Side::Sell>(Qremaining,ID,price);}
+
+    
+
+    }
+
+    else{
+
+        Qremaining = LOB::matching<Side::Buy>(quantity, ID, price);
+
+        if(Qremaining > 0){addOrder<Side::Buy>(Qremaining,ID,price) ;}
+
+
+    }
+
 
 };
+
 template<Side S>
-void LOB::addOrder(uint16_t quantity, uint32_t ID, uint16_t price) {
+
+void LOB::addOrder(uint16_t quantity, uint32_t ID, uint16_t price) noexcept {
+
  // if the order hasn't been fully matched (or not matched at all) we have to
+
   // actually save it:
-    constexpr Side side = S == Side::Buy ? Side::Buy : Side::Sell;	 
+
+    constexpr Side side = S == Side::Buy ? Side::Buy : Side::Sell;     
+
 
     auto &priceLevelID = side == Side::Buy ? data.idQueuedBid[price] : data.idQueuedAsk[price];
+
     auto &priceLevelQ =side == Side::Buy ? data.quantityOrdersBid[price] : data.quantityOrdersAsk[price];
+
     auto &bitIndexMap = side == Side::Buy ? data.bitIndexBid : data.bitIndexAsk;
+
     auto& priceLvlTail = side == Side::Buy? data.bidTail[price] : data.askTail[price];
+
     auto& priceLvlHead = side == Side::Buy ? data.bidHead[price] : data.askHead[price];
+
 
     if(priceLvlTail - priceLvlHead == 64)[[unlikely]]{return;}
 
+
       bitIndexMap[price >> 6] |= 1ULL << (price & 63);
 
-      
-      priceLevelID[priceLvlTail & 63] = ID;
-      priceLevelQ[priceLvlTail & 63] = quantity;
-      data.typeByID[ID] = S == Side::Buy ? 'B' : 'A';
-      data.priceByID[ID] = price;
-      priceLvlTail ++;
-  }
 
-void LOB::cancelOrder(uint32_t id) {
+      
+
+      priceLevelID[priceLvlTail & 63] = ID;
+
+      priceLevelQ[priceLvlTail & 63] = quantity;
+
+      data.typeByID[ID] = S == Side::Buy ? 'B' : 'A';
+
+      data.priceByID[ID] = price;
+
+      priceLvlTail ++;
+
+  } 
+void LOB::cancelOrder(uint32_t id) noexcept {
 	//safeguard
 	if(id > 20000)[[unlikely]] return;
 

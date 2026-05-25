@@ -40,3 +40,8 @@ struct matchResult {
   uint32_t quantity;
   uint32_t price;
 };
+
+enum class Side : uint8_t{
+	Buy,
+	Sell
+};
