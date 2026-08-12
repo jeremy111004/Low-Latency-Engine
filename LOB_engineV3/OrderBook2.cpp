@@ -100,6 +100,8 @@ void LOB::addOrder(uint16_t quantity, uint32_t ID, uint16_t price) noexcept {
 
       data.priceByID[ID] = price;
 
+      data.physicalLocByID[ID] = priceLvlTail & 63;
+
       priceLvlTail ++;
 
   } 
