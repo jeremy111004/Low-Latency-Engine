@@ -22,10 +22,10 @@ struct SoA {
 	uint16_t quantityOrdersBid[size][maxQueueDepth]{};
 
 	// current heads and tails
-	uint8_t askHead[size]{};
-	uint8_t bidHead[size]{};
-	uint8_t askTail[size]{};
-	uint8_t bidTail[size]{};
+	uint64_t askHead[size]{};
+	uint64_t bidHead[size]{};
+	uint64_t askTail[size]{};
+	uint64_t bidTail[size]{};
 
 
 	char typeByID[dailyOrdersQuantity]{};
