@@ -129,8 +129,16 @@ void LOB::cancelOrder(uint32_t id) noexcept {
 
   
 }
+void LOB::matchedListprinter(int numberOfPrints){
+	for(int i = 0; i<numberOfPrints;i++){
+		auto ord1 = matchedList[i].id1;
+		auto ord2 = matchedList[i].id2;
+		auto q = matchedList[i].quantity;
+		std::cout << "Order ID : " << ord1 << " was matched with Order ID : " << ord2 << " for this quantity : " << q;
+		
+	}
+};
 
 
 
-// This forces the compiler to generate the code in this .cpp file
 

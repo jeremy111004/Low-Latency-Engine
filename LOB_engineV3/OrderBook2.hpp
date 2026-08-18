@@ -5,7 +5,7 @@
 #include <boost/circular_buffer/base.hpp>
 
 #include <sys/types.h>
-
+#include <iostream>
 #include<array>
 #include <bit>
 #include <vector>
@@ -28,6 +28,8 @@ int indexBestPriceFinder() noexcept;
   uint64_t editOrder(uint64_t id, uint32_t newPrice, uint32_t newQuantity) noexcept;
 
   void reset()noexcept;
+
+  void matchedListprinter(int numberOfPrints);
 
   // Utilities
   uint64_t generateID()noexcept;
@@ -107,6 +109,7 @@ auto isIndexValid = [&](int currentIndex){
         bestIndex = indexBestPriceFinder<oppositeSide>();
         continue; 
     };
+   
 
     // we drain the orders at the found price level :
     while (quantity > 0 && highestPrioOrderIndex != lowestPrioOrderIndex ) {
@@ -118,7 +121,7 @@ auto isIndexValid = [&](int currentIndex){
       matchedOrderQ -= qmatched;
 
            matchedList.push_back(
-          {ID, matchedOrderID, static_cast<uint32_t>(bestIndex), qmatched});
+          {ID, matchedOrderID, qmatched ,static_cast<uint32_t>(bestIndex)});
       // removal and update logic
       if (matchedOrderQ == 0) {
        
@@ -139,3 +142,5 @@ auto isIndexValid = [&](int currentIndex){
 
    return quantity; 
 }
+
+
