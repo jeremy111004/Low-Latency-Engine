@@ -25,7 +25,7 @@ std::vector<InboundJob> fileReaderParser(const char* filename) noexcept {
 	std::filesystem::path filePath
         = filename;
 	
-	std::ifstream f("incomingOrders.txt");
+	std::ifstream f("../data/incomingOrders.txt");
 	if(!f.is_open()){
 		std::cout << "error opening file";
 	return {} ;}

@@ -39,7 +39,7 @@ void consumer(lockFreeSPSC<InboundJob,65536>& r,LOB& lob,std::atomic<bool>& done
 
 static void pipeline_endToEnd(benchmark::State &state){
 	LOB lob;
-	auto orders = fileReaderParser("incomingOrderstest.txt");
+	auto orders = fileReaderParser("../data/incomingOrders.txt");
 	
 	for (auto _ : state) {
         state.PauseTiming();
