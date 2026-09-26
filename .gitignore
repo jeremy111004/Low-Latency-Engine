@@ -1,10 +1,17 @@
-# Ignore compiled binaries
-engine
-LOB_engineV3/engine
-LOB_engine_baseline/engine
-LOB_enginev2/engine
 
-# Ignore build directories and object files
 build/
-*.o
-*.obj
+bin/
+lib/
+
+
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+
+.vscode/
+.cache/
+*.swp
+.DS_Store
