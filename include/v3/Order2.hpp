@@ -6,7 +6,8 @@
 struct SoA {	
 	// daily size parameters
 	static constexpr uint16_t size = 300;
-	static constexpr uint8_t maxQueueDepth = 64;
+	static constexpr uint16_t maxQueueDepth = 1024; // orders per price level (must be a power of 2)
+	static_assert((maxQueueDepth & (maxQueueDepth - 1)) == 0, "maxQueueDepth must be a power of 2");
 	static constexpr uint16_t dailyOrdersQuantity = 20000;
 
 	// price level enabled maps
@@ -30,7 +31,7 @@ struct SoA {
 
 	char typeByID[dailyOrdersQuantity]{};
 	uint16_t priceByID[dailyOrdersQuantity]{};
-	uint8_t physicalLocByID[dailyOrdersQuantity];
+	uint16_t physicalLocByID[dailyOrdersQuantity];
 
 };
 

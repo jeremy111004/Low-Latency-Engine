@@ -67,5 +67,6 @@ static void LOB_Continuous(benchmark::State &state) {
         }
     }
     state.SetItemsProcessed(state.iterations() * totalSize);
+    state.counters["dropped"] = static_cast<double>(lob.droppedOrders()); // from the last iteration
 }
 BENCHMARK(LOB_Continuous)->Iterations(500)->Unit(benchmark::kNanosecond);

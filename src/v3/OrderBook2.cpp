@@ -14,7 +14,7 @@ uint64_t LOB::generateID() noexcept {
 void LOB::reset() noexcept {
    matchedList.clear();
 
-   uint16_t numberElements = 64;
+   uint16_t numberElements = SoA::maxQueueDepth;
    uint16_t numberPriceLevel = 300;
    for(uint16_t i = 0; i < numberPriceLevel; i ++){
 	   data.askHead[i] = 0;
@@ -34,6 +34,7 @@ void LOB::reset() noexcept {
    std::fill(std::begin(data.bitIndexBid),std::end(data.bitIndexBid),0);
  
   NextID = 0;
+  droppedOrders_ = 0;
  
 }
  void LOB::processOrder(uint16_t quantity, uint32_t ID, uint16_t price, Side type) noexcept{
@@ -84,7 +85,7 @@ void LOB::addOrder(uint16_t quantity, uint32_t ID, uint16_t price) noexcept {
     auto& priceLvlHead = side == Side::Buy ? data.bidHead[price] : data.askHead[price];
 
 
-    if(priceLvlTail - priceLvlHead == 64)[[unlikely]]{return;}
+    if(priceLvlTail - priceLvlHead == SoA::maxQueueDepth)[[unlikely]]{droppedOrders_++; return;}
 
 
       bitIndexMap[price >> 6] |= 1ULL << (price & 63);
@@ -92,15 +93,15 @@ void LOB::addOrder(uint16_t quantity, uint32_t ID, uint16_t price) noexcept {
 
       
 
-      priceLevelID[priceLvlTail & 63] = ID;
+      priceLevelID[priceLvlTail & (SoA::maxQueueDepth - 1)] = ID;
 
-      priceLevelQ[priceLvlTail & 63] = quantity;
+      priceLevelQ[priceLvlTail & (SoA::maxQueueDepth - 1)] = quantity;
 
       data.typeByID[ID] = S == Side::Buy ? 'B' : 'A';
 
       data.priceByID[ID] = price;
 
-      data.physicalLocByID[ID] = priceLvlTail & 63;
+      data.physicalLocByID[ID] = priceLvlTail & (SoA::maxQueueDepth - 1);
 
       priceLvlTail ++;
 
@@ -113,16 +114,16 @@ void LOB::cancelOrder(uint32_t id) noexcept {
 	auto typeByID = data.typeByID[id];
 	auto phyLoc = data.physicalLocByID[id];
 
-	// when Orders have been filled and not overwritten yet, their phyLoc are set at 64,
+	// when Orders have been filled and not overwritten yet, their phyLoc are set at maxQueueDepth,
 	// and price at 300 
-	if(phyLoc > 63 || priceLevel>299)[[unlikely ]] return;
+	if(phyLoc >= SoA::maxQueueDepth || priceLevel>299)[[unlikely ]] return;
 	auto& mapToCheck = typeByID == 'B' ? data.idQueuedBid[priceLevel] : data.idQueuedAsk[priceLevel];	
 
 	typeByID == 'B' ? data.quantityOrdersBid[priceLevel][phyLoc] = 0 : data.quantityOrdersAsk[priceLevel][phyLoc] = 0;
 	mapToCheck[phyLoc] = 0;
 
 	data.priceByID[id]       = 300;
-	data.physicalLocByID[id] = 64;  
+	data.physicalLocByID[id] = SoA::maxQueueDepth;  
 	data.typeByID[id]        = 'I';
 
 

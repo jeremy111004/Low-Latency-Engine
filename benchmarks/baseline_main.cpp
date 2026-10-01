@@ -3,18 +3,14 @@
 #include <cstdint>
 #include <random>
 #include <vector>
+#include <cmath>
 
 Order OrdersGenerator(uint32_t price, Side side, uint64_t id) {
-  int min = price - 4;
-  int max = price + 4;
-
-  static std::random_device rd;
-  static std::mt19937 gen(rd());
-
-  std::uniform_int_distribution<> distribP(min, max);
+  static std::mt19937 gen(42);  // same seed as v3
+  std::normal_distribution<double> distribP(static_cast<double>(price), 2.0);
   std::uniform_int_distribution<> distribQ(1, 50);
 
-  return Order{id, static_cast<uint32_t>(distribP(gen)),
+  return Order{id, static_cast<uint32_t>(std::round(distribP(gen))),
                static_cast<uint32_t>(distribQ(gen)), side};
 }
 

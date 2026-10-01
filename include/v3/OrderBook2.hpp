@@ -30,6 +30,7 @@ int indexBestPriceFinder() noexcept;
   void reset()noexcept;
 
   void matchedListprinter(int numberOfPrints);
+  uint64_t droppedOrders() const noexcept { return droppedOrders_; }
 
   // Utilities
   uint64_t generateID()noexcept;
@@ -39,6 +40,7 @@ private:
    SoA data; 
    std::vector<matchResult> matchedList;
    uint16_t NextID{0} ;
+   uint64_t droppedOrders_{0}; // orders rejected because their price level was full
   };
 
 
@@ -113,8 +115,8 @@ auto isIndexValid = [&](int currentIndex){
 
     // we drain the orders at the found price level :
     while (quantity > 0 && highestPrioOrderIndex != lowestPrioOrderIndex ) {
-      auto &matchedOrderID = lstPriceLevelID[highestPrioOrderIndex & 63] ;
-      auto &matchedOrderQ = lstPriceLevelQ[highestPrioOrderIndex & 63];
+      auto &matchedOrderID = lstPriceLevelID[highestPrioOrderIndex & (SoA::maxQueueDepth - 1)] ;
+      auto &matchedOrderQ = lstPriceLevelQ[highestPrioOrderIndex & (SoA::maxQueueDepth - 1)];
       if(matchedOrderID == 0)[[unlikely]]{highestPrioOrderIndex++; continue;}
       uint32_t qmatched = std::min(quantity, matchedOrderQ);
       quantity -= qmatched;
@@ -126,7 +128,7 @@ auto isIndexValid = [&](int currentIndex){
       if (matchedOrderQ == 0) {
        
 	data.priceByID[matchedOrderID]       = 300;
-	data.physicalLocByID[matchedOrderID] = 64;  
+	data.physicalLocByID[matchedOrderID] = SoA::maxQueueDepth;  
 	data.typeByID[matchedOrderID]        = 'I';
 
 	 matchedOrderID = 0;
