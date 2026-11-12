@@ -59,7 +59,7 @@ static void pipeline_endToEnd(benchmark::State &state){
     lob.matchedListprinter(5);
 }
 	
-BENCHMARK(pipeline_endToEnd)->Iterations(500)->Unit(benchmark::kNanosecond);
+BENCHMARK(pipeline_endToEnd)->Iterations(500)->UseRealTime()->Unit(benchmark::kNanosecond);
 
 	
 	//queue the orders

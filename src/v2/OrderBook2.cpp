@@ -42,8 +42,9 @@ void LOB::addOrder(Order &ord) {
   // actually save it:
   if (ord.quantity > 0) [[likely]] {
     // this line create an order directly in the pre allocated memory Arena
-    Order *order_ptr = new (arena.allocate<Order>()) Order(ord);
-    
+    Order *slot = arena.allocate<Order>();
+    if (!slot) [[unlikely]] return;
+    Order *order_ptr = new (slot) Order(ord);    
     bool isBuy = ord.type == 'B';
 
     auto &priceLevel =
@@ -66,38 +67,20 @@ void LOB::addOrder(Order &ord) {
 }
 
 void LOB::cancelOrder(uint64_t id) {
-  auto exist = orderMap.find(id);
-  if (exist == orderMap.end())
-    return;
-  auto ordEntry = exist->second;
-  auto ordptr = ordEntry.ordptr;
-  auto listAtPriceLevel = ordEntry.levelptr;
+  if (id >= orderArray.size()) return;
+  auto [ordptr, level] = orderArray[id];
+  if (!ordptr) return;
 
-  // Neighbor linking
-  if (ordptr->prev) {
-    ordptr->prev->next = ordptr->next;
-  } else { // if there's no prev it was a head
-    listAtPriceLevel->head =
-        ordptr->next; // so the new head is either nullptr or ordptr->next;
-  }
-  if (ordptr->next) {
-    ordptr->next->prev = ordptr->prev;
-  } else { // if there's no next then it was a tail
-    listAtPriceLevel->tail = ordptr->prev;
-  }
+  ordptr->prev->next = ordptr->next;
+  if (ordptr->next) ordptr->next->prev = ordptr->prev;
+  else level->tail = ordptr->prev;
 
-  // we decrement the metadata of the price level
-  listAtPriceLevel->numberOfOrders--;
-  // Use 64 bit promotion to prevent overflow before subtraction
-  listAtPriceLevel->totalVolume -=
-      static_cast<uint64_t>(ordptr->price) * ordptr->quantity;
+  level->numberOfOrders--;
+  level->totalVolume -= static_cast<uint64_t>(ordptr->price) * ordptr->quantity;
+
+  orderArray[id] = {nullptr, nullptr};
   arena.deallocate(ordptr);
-  
-
-  orderMap.erase(id);
 }
-
-
 
 // This forces the compiler to generate the code in this .cpp file
 

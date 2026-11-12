@@ -67,7 +67,7 @@ private:
     Order *ordptr;
     PriceList *levelptr;
   };
-  std::unordered_map<uint64_t, orderEntry> orderMap;
+
   std::array<orderEntry,20002> orderArray;
 
   std::vector<matchResult> matchedList;

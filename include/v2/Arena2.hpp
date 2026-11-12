@@ -1,3 +1,4 @@
+#pragma once
 #include "Order2.hpp"
 #include <algorithm>
 #include <cassert>
@@ -6,11 +7,10 @@
 #include <memory>
 #include <list>
 
- struct Freelist {
-    Order* head = nullptr;
-    Order* tail = nullptr;
-  };
-
+struct Freelist {
+  Order* head = nullptr;
+  Order* tail = nullptr;
+};
 class Arena {
   static constexpr size_t alignment = alignof(Order);
 

@@ -5,13 +5,9 @@
 #include <charconv>
 #include <filesystem>
 #include "Order2.hpp"
+#include "parser.hpp"
 
-struct InboundJob {
-    uint32_t orderId;
-    uint16_t price;
-    uint16_t quantity;
-    Side     side;
-};
+
 bool isOrderCorrect(std::string_view s){
     int ctr = 0;
     for(auto c : s){
@@ -20,14 +16,12 @@ bool isOrderCorrect(std::string_view s){
     return ctr == 3;
 }
 std::vector<InboundJob> fileReaderParser(const char* filename) noexcept {
-	int addedorders = 0;
 	std::error_code ec;
 	std::filesystem::path filePath
         = filename;
 	
-	std::ifstream f("../data/incomingOrders.txt");
-	if(!f.is_open()){
-		std::cout << "error opening file";
+	std::ifstream f(filename);	if(!f.is_open()){
+	std::cout << "error opening file";
 	return {} ;}
 	std::string str;
 	std::vector<InboundJob> vec;
@@ -69,11 +63,9 @@ std::vector<InboundJob> fileReaderParser(const char* filename) noexcept {
 		if(res3.ec != std::errc{}){continue;}
 		if(obj.price < 1 || obj.price >= 300 || obj.quantity < 1 || obj.quantity > 9999 
 				 || obj.orderId >= 20000) continue;
-		addedorders++;
 		vec.push_back(obj);
 		
 	};
-	f.close();	
 	return vec;
 	
 }

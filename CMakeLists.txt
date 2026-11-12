@@ -40,11 +40,6 @@ function(add_lob_benchmark name source engine)
   lob_optimise(${name})
 endfunction()
 
-function(add_lob_tool name source engine)
-  add_executable(${name} ${source})
-  target_link_libraries(${name} PRIVATE ${engine} Threads::Threads)
-  lob_optimise(${name})
-endfunction()
 
 add_lob_engine(lob_baseline include/baseline src/baseline/OrderBook.cpp)
 add_lob_engine(lob_v2       include/v2       src/v2/OrderBook2.cpp)
@@ -55,4 +50,4 @@ add_lob_benchmark(bench_v2       benchmarks/v2_main.cpp       lob_v2)
 add_lob_benchmark(bench_v3       benchmarks/v3_main.cpp       lob_v3)
 add_lob_benchmark(bench_v3_live  benchmarks/v3_mainlive.cpp   lob_v3)
 
-add_lob_tool(latency_v3 benchmarks/v3_latency.cpp lob_v3)
+

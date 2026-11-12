@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <map>
 #include <string>
@@ -30,16 +31,16 @@ template <class T, size_t capacity> class lockFreeSPSC{
 
 	private:
 		std::array<T,capacity> ringbuffer_;
-		alignas(64) std::atomic<size_t>  producer_pos_;
-		alignas(64) std::atomic<size_t> consumer_pos_;
+		alignas(64) std::atomic<size_t> producer_pos_{0};
+		alignas(64) std::atomic<size_t> consumer_pos_{0};
 
 };
 template<class T, size_t capacity>
 bool lockFreeSPSC<T,capacity>::try_enqueue(const T &item) noexcept {
 	const size_t cur_prod = producer_pos_.load(std::memory_order_relaxed);
-	const size_t cur_cons = consumer_pos_.load(std::memory_order_relaxed);
+	const size_t cur_cons = consumer_pos_.load(std::memory_order_acquire);
 
-	if((cur_prod ^ cur_cons) == capacity){return false;}
+	if (cur_prod - cur_cons == capacity) { return false; }
 
 	ringbuffer_[cur_prod & (capacity - 1)] = item;
 	producer_pos_.store(cur_prod + 1,std::memory_order_release);

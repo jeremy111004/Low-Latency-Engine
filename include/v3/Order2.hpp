@@ -31,7 +31,7 @@ struct SoA {
 
 	char typeByID[dailyOrdersQuantity]{};
 	uint16_t priceByID[dailyOrdersQuantity]{};
-	uint16_t physicalLocByID[dailyOrdersQuantity];
+	uint16_t physicalLocByID[dailyOrdersQuantity]{};
 
 };
 
