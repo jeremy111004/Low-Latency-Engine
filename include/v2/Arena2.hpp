@@ -7,8 +7,8 @@
 #include <list>
 
  struct Freelist {
-    Order* head;
-    Order* tail;
+    Order* head = nullptr;
+    Order* tail = nullptr;
   };
 
 class Arena {
